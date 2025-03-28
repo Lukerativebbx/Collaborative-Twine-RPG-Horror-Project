@@ -14,3 +14,5 @@ Please feel free to contact me at bellamyluke97@gmail.com
 I look forward to see what we can do!!
 
 Download Twine here! https://twinery.org/
+
+Sugarcube v2 Documentation https://www.motoslave.net/sugarcube/2/docs/
