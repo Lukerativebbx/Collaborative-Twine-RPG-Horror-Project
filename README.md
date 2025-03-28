@@ -1,6 +1,6 @@
 Hi yall!
 
-I've been working in this twine file as an open access template for RPG horror storytelling, and a way to kickstart a collaborative effort for useful ui design! I am currently using sugarcube v2 and improving the quality in audio integration. Some of the things I hope to achieve are:  
+I've been working on this twine file as an open access template for RPG horror storytelling, and a way to kickstart a collaborative effort for useful ui design! I am currently using sugarcube v2 and improving the quality in audio integration. Some of the things I hope to achieve are:  
   1. Utilising the 'Tag' function within twine's passages in conjunction with javascript to implement ui presets. This is to increase an ease of workflow and to provide different templates for different styles.  
   2. A healthbar and madness bar - with the aim to be able to change it dynamically in passages throughout the narrative in the game.  
   3. Incorporate more functionality through passage coding - including cascading text links (links within links or text within text), the ability to change the image in the narrative container (the main image), and any other quality of life improvements for dynamic storytelling!  
@@ -12,3 +12,5 @@ Ultimately, I would love this space to be for anyone willing to increase the acc
 
 Please feel free to contact me at luke.bellamy@outlook.com.au  
 I look forward to see what we can do!!
+
+Download Twine here! https://twinery.org/
