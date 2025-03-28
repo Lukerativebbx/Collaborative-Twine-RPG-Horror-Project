@@ -1,0 +1,543 @@
+/* Import Gothic Fantasy Font */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap');
+
+/* Default passage styling */
+#passages {
+    font-family: 'EB Garamond', serif; /* Gothic style serif font */
+    font-size: 18px;
+    color: #ddd;
+    background: #121212;
+    padding: 20px;
+}
+
+#passages, body {
+  cursor: default !important;
+  user-select: none; /* Prevents text from being selectable */
+}
+
+.menu-button, .eldritch-textbox {
+  cursor: pointer;
+}
+
+/* Import Font */
+.passage.menu, 
+.title, 
+.menu-options, 
+.eldritch-textbox, 
+.eldritch-textbox p, 
+.modal-content {
+font-family: 'Cinzel', serif !important;
+}
+
+/* --- MENU STYLE --- */
+.passage.menu {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  max-height: 800px;
+  margin: 20px auto;
+  background: rgba(10, 13, 24, 0.75);
+  border: 6px solid rgba(56, 69, 92, 0.7);
+  padding: 10px;
+  font-size: 20px;
+  color: #c9c3b6;
+  text-align: center;
+  border-radius: 15px;
+  box-shadow: inset 0px 0px 35px rgba(0, 20, 40, 0.6);
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+  overflow: hidden;
+}
+
+/* --- MENU OPTIONS --- */
+.menu-options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+}
+
+/* --- TEXTBOXES (Menu Buttons) --- */
+.eldritch-textbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 600px;
+  height: 150px;
+  background: transparent url("https://lukerative.neocities.org/Beneath%20Hermits%20Nest/Images/ArabicDecoUI/White/PNG/Button10%20cool.png") no-repeat center center;
+  background-size: 100% 100%;
+  box-sizing: border-box;
+  color: #fff;
+  font-size: 30px;
+  transition: background 0.3s ease-in-out;
+  margin: 0;
+  padding: 0;
+  border: none !important;
+}
+
+.eldritch-textbox:hover {
+  background: transparent url("https://lukerative.neocities.org/Beneath%20Hermits%20Nest/Images/ArabicDecoUI/White/PNG/ButtonFilled2%20cool.png") no-repeat center center;
+  background-size: 100% 100%;
+}
+
+/* --- MODAL STYLE (Correct Centering) --- */
+.modal {
+  display: none;
+  position: absolute;
+  z-index: 1001;
+  width: 80%;
+  max-width: 600px;
+  background-color: rgba(0, 0, 0, 0.85);
+  padding: 20px;
+  border: 1px solid #4b5c70;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+  text-align: center;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* --- MODAL CONTENT --- */
+.modal-content {
+  background-color: rgba(20, 20, 30, 0.9);
+  padding: 20px;
+  border: 4px solid #4b5c70;
+  text-align: center;
+  color: #fff;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+  position: relative;
+}
+
+/* Reduce modal text size */
+.modal-content {
+  font-size: 18px !important; /* Smaller, more readable */
+  line-height: 1.4;
+}
+
+/* --- CLOSE BUTTON --- */
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: #ff6666;
+}
+
+/* --- PARCHMENT TEXTURE BACKGROUND --- */
+.passage.menu::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://www.transparenttextures.com/patterns/asfalt-light.png') repeat;
+  opacity: 0.15;
+  z-index: 0;
+}
+
+/* --- ENHANCED RIPPLE EFFECT --- */
+.passage.menu::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 150%;
+  height: 100%;
+  background: url('https://lukerative.neocities.org/Beneath%20Hermits%20Nest/Images/Menu%20Gif.gif') no-repeat center center;
+  background-size: 100% 100%;
+  opacity: 0.35;
+  z-index: 1;
+}
+
+/* --- ENSURE PASSAGE CONTENT SITS ABOVE BACKGROUND EFFECTS --- */
+.passage.menu > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* --- TITLE STYLE --- */
+.title {
+  font-weight: 700;
+  font-size: 48px;
+  color: #dcdcdc;
+  text-align: center;
+  letter-spacing: 1px;
+  text-shadow: 0 0 8px rgba(200,200,255,0.3), 0 0 12px rgba(180,200,220,0.2);
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.title::after {
+  content: "";
+  display: block;
+  width: 50%;
+  height: 2px;
+  background: rgba(200,200,255,0.5);
+  margin: 10px auto 0;
+}
+
+/* --- ENSURE TEXTBOXES USE THE CINZEL FONT --- */
+.eldritch-textbox {
+  font-family: 'Cinzel', serif !important;
+}
+
+.eldritch-textbox p {
+  font-family: 'Cinzel', serif !important;
+}
+
+/* --- OTHER PASSAGE STYLES --- */
+
+/* --- MENU STYLING (Ensures Start Passage is NOT Affected) --- */
+.passage.menu {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    max-height: 800px;
+    margin: 20px auto;
+    background: rgba(10, 13, 24, 0.75);
+    border: 6px solid rgba(56, 69, 92, 0.7);
+    padding: 10px;
+    font-size: 20px;
+    color: #c9c3b6;
+    text-align: center;
+    border-radius: 15px;
+    box-shadow: inset 0px 0px 35px rgba(0, 20, 40, 0.6);
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+    overflow: hidden;
+}
+
+/* --- GENERAL PASSAGE STYLES (DEFAULT) --- */
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap');
+
+#passages {
+    font-family: 'EB Garamond', serif; /* Gothic style serif font */
+    font-size: 18px;
+    color: #ddd;
+    background: #121212;
+    padding: 20px;
+}
+
+#passages, body {
+    cursor: default !important;
+    user-select: none; /* Prevents text selection */
+}
+
+/* Import Gothic Fantasy Font */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+
+/* Default passage styling */
+#passages {
+    font-family: 'EB Garamond', serif; /* Gothic style serif font */
+    font-size: 18px;
+    color: #ddd;
+    background: #121212;
+    padding: 20px;
+}
+
+#passages, body {
+  cursor: default !important;
+  user-select: none;
+}
+
+/* --- RPG TEMPLATE LAYOUT --- */
+.rpg-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center; /* Center the RPG container */
+    align-items: relative;
+    gap: 25px;
+    background: rgba(10, 10, 20, 0.9);
+    border: 0px solid #4b5c70;
+    padding: 20px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto; /* Centers the RPG container */
+    position: relative;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.6);
+  	transform: scale(1); /* Slightly scales everything inside */
+}
+
+
+
+/* --- LEFT PANEL: CHARACTER & STATS --- */
+.character-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%; /* Fixed width */
+    background: rgba(20, 20, 30, 0.85);
+    border: 2px solid #4b5c70;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.4);
+  	font-family: 'Cinzel', serif !important;
+}
+
+/* Character Portrait */
+.character-portrait img {
+    width: 100%;
+    max-width: 100%; /* Slightly reduced */
+    border-radius: 8px;
+    border: 3px solid rgba(136, 136, 136, 0.8);
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Stat Bars */
+.stat-bar-container {
+    width: 100%;
+    margin-top: 40px;
+  	margin-bottom: 10px;
+    text-align: center;
+}
+
+.stat-bar {
+    width: 100%;
+    height: 12px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+}
+
+.health-bar-fill {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, red, darkred);
+}
+
+.madness-bar-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(to right, purple, purple);
+}
+
+/* --- PLAYER PANEL (Below Lucian & Fit Proportionally) --- */
+.player-panel {
+    width: 100%;
+  	height: 100%
+    background: rgba(15, 15, 25, 0.95);
+    border: 2px solid #4b5c70;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 15px;
+    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* --- INVENTORY OPTIONS: Character & Inventory (Sized Properly) --- */
+.player-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 40px;
+    background: rgba(20, 20, 30, 0.85);
+    border: 1px solid #4b5c70;
+    color: #ffffff;
+    font-family: 'Cinzel', serif;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border-radius: 8px;
+    margin: 4px 0;
+}
+
+/* --- LEFT PANEL: Character & Inventory (Sized Properly) --- */
+.left-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 260px;
+    background: transparent;
+    border: 0px solid #4b5c70;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.4);
+    flex-shrink: 0;
+
+    /* ✅ Makes the left panel follow the scroll inside the RPG container */
+    position: sticky;
+    top: 0px; /* Adjust if needed */
+    height: fit-content;
+}
+
+.player-action:hover {
+    background: rgba(50, 50, 80, 0.95);
+    border-color: #ffffff;
+    transform: scale(1.05);
+}
+
+/* --- RIGHT PANEL: Narrative (Now Scales Properly) --- */
+.narrative-container {
+    flex-grow: 1; /* Expands naturally */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: rgba(15, 15, 25, 0.95);
+    border: 2px solid #4b5c70;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+    max-width: 100%; /* Ensures narrative fits inside */
+}
+
+/* Narrative Image */
+.narrative-container img {
+    display: relative;
+    width: 100%;
+    max-width: 950px; /* Adjusted to fit */
+    height: auto;
+    border-radius: 10px;
+    border: 3px solid rgba(136, 136, 136, 0.8);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Narrative Text */
+.narrative-text {
+    margin-top: 15px;
+    font-family: 'Cinzel', serif;
+    font-size: 18px;
+    color: #c9c3b6;
+    text-align: justify;
+    padding: 10px;
+}
+
+/* --- CHOICE BUTTONS (Ensuring Proportional Layout) --- */
+.rpg-links {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    margin-top: auto;
+  	padding bottom: 10px;
+  	cursor: pointer;
+  	width: 100%;
+  	position: relative;
+}
+
+.rpg-links, .rpg-textbox {
+  cursor: pointer;
+}
+
+/* RPG Clickable Textboxes */
+.rpg-textbox {
+    display: flex;
+  	position: f;
+    align-items: center;
+    justify-content: center;
+    min-width: 140px;
+    width: 100%;
+    height: 100%;
+    background: rgba(20, 20, 30, 0.85);
+    border: 2px solid #4b5c70;
+    color: #ffffff;
+    font-family: 'Cinzel', serif;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border-radius: 8px;
+}
+
+/* Divider line between narrative text and choice buttons */
+.narrative-divider {
+    width: 80%; /* Adjust width as needed */
+    height: 2px; /* Thickness of the line */
+    background: rgba(200, 200, 255, 0.5); /* Subtle glowing effect */
+    margin: 20px auto; /* Adds spacing and centers the line */
+}
+
+/* Hover Effect */
+.rpg-textbox:hover {
+    background: rgba(50, 50, 80, 0.95);
+    border-color: #ffffff;
+    transform: scale(1.05);
+}
+
+/* DIALOGUE BOX */
+.passage.dialogue {
+  background: rgba(20, 20, 20, 0.9);
+  border: 3px solid #ccc;
+  padding: 15px;
+  font-style: italic;
+  text-align: left;
+  max-width: 600px;
+  margin: auto;
+  border-radius: 10px;
+}
+
+/* NOTE / PARCHMENT STYLE */
+.passage.note {
+  background: url('https://www.transparenttextures.com/patterns/aged-paper.png');
+  border: 3px solid #b8860b;
+  padding: 20px;
+  font-family: "Courier New", monospace;
+  color: #3a2f16;
+}
+
+/* COMBAT STYLE */
+.passage.combat {
+  background: #500;
+  border: 3px solid #a00;
+  padding: 15px;
+  font-weight: bold;
+  text-align: center;
+  color: white;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&display=swap');
+
+.typewriter-textgreen {
+    font-family: 'EB Garamond', serif; /* Gothic horror style */
+    font-size: 1.2em;
+    color: #49a75b; /* Sickly green with a muted, eerie tone */
+    font-style: italic;
+    text-shadow: 2px 2px 5px rgba(0, 50, 0, 0.7); /* Subtle eerie glow */
+    letter-spacing: 0.5px; /* Slight spacing for unsettling effect */
+  	text-transform: none;
+}
+
+.typewriter-text {
+    font-family: 'EB Garamond', serif; /* Gothic horror style */
+    font-size: 1.2em;
+    font-style: italic;
+    text-shadow: 2px 2px 5px rgba(0, 50, 0, 0.7); /* Subtle eerie glow */
+    letter-spacing: 0.5px; /* Slight spacing for unsettling effect */
+  	text-transform: none;
+}
+
+/* Make clickable text look like a link */
+.clickable-text {
+    color: #ffcc00; /* Gold color for clickable text */
+    text-decoration: underline; /* Underline to indicate it's a link */
+    cursor: pointer; /* Pointer cursor to indicate it is clickable */
+}
+
+/* Optional: Change color on hover */
+.clickable-text:hover {
+    color: #ff9900; /* Change color on hover */
+}
+
+.delayed-text {
+    display: none; /* Ensure the text is hidden initially */
+}
+
+.delayed-text {
+    display: none; /* Ensure the text is hidden initially */
+}
+.clickable-text {
+    color: #ffcc00; /* Gold color for clickable text */
+    text-decoration: underline; /* Underline to indicate it's a link */
+    cursor: pointer; /* Pointer cursor to indicate it is clickable */
+}
+.clickable-text:hover {
+    color: #ff9900; /* Change color on hover */
+}
