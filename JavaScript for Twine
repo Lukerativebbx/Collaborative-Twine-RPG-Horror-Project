@@ -1,0 +1,210 @@
+$(document).ready(function() {
+    // Ensure modals are added ONCE (avoids duplicates)
+    if ($("#modalGameInfo").length === 0) {
+        $(".menu-options").append(`
+            <div id="modalGameInfo" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2 class="modal-title">Game Information</h2>
+                    <div class="modal-underline"></div>
+                    <p>The rain falls heavy over Gloomtow, a dockside town where shadows linger longer than they should.</p>
+                    <p>Callum Whitlock, a merchant with ties to the sea, returns to find more than just his ships missing...</p>
+                    <p><strong>Set sail, if you dare. But beware—not everything lost at sea wishes to be found...</strong></p>
+                </div>
+            </div>
+            
+ <div id="modalHowToPlay" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2 class="modal-title">How To Play</h2>
+                    <div class="modal-underline"></div>
+                    <p>This game is a choice-driven interactive experience. Use the options provided to shape your journey.</p>
+                    <p>Your decisions affect Callum's story—who he meets, where he goes, and what he uncovers.</p>
+                    <p>Be mindful of your **health** and **madness** levels, as they influence events.</p>
+                    <p><strong>Good luck</strong></p>
+                </div>
+            </div>
+        `);
+    }
+
+    // OPEN & CLOSE MODALS
+    $(document).on("click", ".modal-trigger", function() {
+        let modalID = $(this).attr("data-modal");
+        $("#" + modalID).fadeIn(200);
+    });
+
+    $(document).on("click", ".close", function() {
+        $(this).closest(".modal").fadeOut(200);
+    });
+
+    $(document).on("click", ".modal", function(event) {
+        if ($(event.target).hasClass("modal")) {
+            $(this).fadeOut(200);
+        }
+    });
+});
+
+// ✅ FIX: Typewriter Effect Now Works on New Content
+function typeWriterEffect(element, htmlContent, speed = 30) {
+    let i = 0;
+    let tempDiv = document.createElement('div');
+    tempDiv.innerHTML = htmlContent.trim();
+    let nodes = Array.from(tempDiv.childNodes);
+    element.innerHTML = ""; // Clear existing content
+
+    function typeNode(node) {
+        if (node.nodeType === Node.TEXT_NODE) {
+            if (i < node.textContent.length) {
+                element.innerHTML += node.textContent.charAt(i);
+                i++;
+                setTimeout(() => typeNode(node), speed);
+            }
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+            let childNodes = Array.from(node.childNodes);
+            let tagName = node.tagName.toLowerCase();
+            let newElement = document.createElement(tagName);
+            Array.from(node.attributes).forEach(attr => newElement.setAttribute(attr.name, attr.value));
+            element.appendChild(newElement);
+            childNodes.forEach(childNode => typeNode(childNode));
+        }
+    }
+
+    nodes.forEach(node => typeNode(node));
+}
+
+// ✅ REAPPLY TYPEWRITER EFFECT AFTER EVERY PASSAGE RENDER
+function applyTypewriterEffect() {
+    $(".typewriter-text, .typewriter-textgreen").each(function () {
+        let htmlContent = $(this).html().trim();
+        $(this).html("");
+        typeWriterEffect(this, htmlContent, 40);
+    });
+}
+
+// ✅ RPG UI PASSAGE INJECTION
+$(document).on(':passagerender', function(ev) {
+    let $passage = $(ev.content);
+
+    if ($passage.hasClass('rpg') || $passage.hasClass('rpg1') || $passage.hasClass('rpg2') || $passage.hasClass('rpg3') || $passage.hasClass('rpg4')) {
+        $(".rpg-container").remove(); // Prevent duplicate containers
+
+        let passageContent = $passage.clone().wrap('<div>').parent().html();
+        let characterImg = "https://lukerative.neocities.org/Beneath%20Hermits%20Nest/Images/Lucian.jpg";
+
+        // ✅ Supports both videos and images per passage
+        let useVideo = SugarCube.State.getVar("$useVideo") || false;
+        let narrativeImg = "https://lukerative.neocities.org/Beneath%20Hermits%20Nest/Images/chris-anderson-dran-sunken-idea4dd.jpg";
+        let narrativeVideo = SugarCube.State.getVar("$videoSource") || "";
+
+        let option1Text = "Investigate the Deck";
+        let option2Text = "Speak to the Crew";
+        let option3Text = "Check the Cargo";
+        let option1Passage = "DeckInvestigation";
+        let option2Passage = "CrewTalk";
+        let option3Passage = "CargoCheck";
+        let dividerColor = "rgba(255, 255, 255, 0.3)"; // Default Divider
+
+        if ($passage.hasClass('rpg')) {
+            characterImg = "https://lukerative.neocities.org/Beneath%20Hermits%20Nest/Images/Lucian.jpg";
+            narrativeImg = "https://lukerative.neocities.org/Beneath%20Hermits%20Nest/Images/Screenshot%202025-03-25%20at%202.04.34%E2%80%AFPM.png";
+            option1Text = "Exit the wagon";
+            option2Text = "Read letter in pocket";
+            option3Text = "Wait";
+            option1Passage = "WagonExit";
+            option3Passage = "Wait";
+            dividerColor = "rgba(200, 200, 255, 0.5)";
+        }
+
+        let rpgLayout = `
+            <div class="rpg-container">
+                <div class="left-panel">
+                    <div class="character-panel">
+                        <div class="character-portrait">
+                            <img id="characterImage" src="${characterImg}" alt="Character Portrait">
+                        </div>
+                        <div class="stat-bar-container">
+                            <div class="stat-bar"><div class="health-bar-fill"></div></div>
+                            <p>HEALTH</p>
+                            <div class="stat-bar"><div class="madness-bar-fill"></div></div>
+                            <p>MADNESS</p>
+                        </div>
+                    </div>
+
+                    <div class="player-panel">
+                        <div class="player-action modal-trigger" data-modal="modalInventory">Inventory</div>
+                        <div class="player-action">Journal</div>
+                        <div class="player-action">Options</div>
+                    </div>
+                </div>
+
+                <div class="narrative-container">
+                    ${useVideo ? `
+                        <video id="narrativeVideo" autoplay loop muted playsinline>
+                            <source src="${narrativeVideo}" type="video/mp4">
+                            <source src="${narrativeVideo.replace('.mp4', '.mov')}" type="video/quicktime">
+                            Your browser does not support the video tag.
+                        </video>
+                    ` : `
+                        <img id="narrativeImage" src="${narrativeImg}" alt="Narrative Image">
+                    `}
+
+                    <div class="narrative-divider" style="background: ${dividerColor};"></div>
+                    
+                    <div id="narrativeTextContainer">${passageContent}</div>
+
+                    <!-- Hide the textboxes if it's an RPG passage -->
+                    ${$passage.hasClass('rpg') ? '' : `
+                        <div class="rpg-links">
+                            <div class="rpg-textbox" onclick="SugarCube.Engine.play('${option1Passage}');">${option1Text}</div>
+                            <div class="rpg-textbox modal-trigger" data-modal="modalLetter">${option2Text}</div>
+                            <div class="rpg-textbox" onclick="SugarCube.Engine.play('${option3Passage}');">${option3Text}</div>
+                        </div>
+                    `}
+                </div>
+            </div>
+        `;
+
+        $passage.empty().append(rpgLayout);
+
+        // ✅ Apply typewriter effect *AFTER* content is loaded
+        setTimeout(function() {
+            $(document).trigger(':passagedisplay');
+            applyTypewriterEffect();
+        }, 50);
+    }
+});
+
+// Function to make text clickable in the narrative container
+function makeTextClickable() {
+    $("#narrativeTextContainer").find("p, span, div").each(function () {
+        var text = $(this).text().trim();
+
+        // Check if the text includes "Look outside" and make it clickable
+        if (text.includes("Look outside")) {
+            var linkText = '<span class="clickable-text" data-target="#typewriterText" data-replace="You peer out of the carriage window, but the view is bleak, a fog hanging over the town.">Look outside</span>';
+            $(this).html(linkText); // Replace with clickable text
+        }
+
+        // Check if the text includes "Continue" and make it clickable
+        if (text.includes("Continue")) {
+            var linkText = '<span class="clickable-text" data-target="#typewriterText" data-replace="You leave it be.">Continue</span>';
+            $(this).html(linkText); // Replace with clickable text
+        }
+    });
+
+    // Add event listener for these clickable elements (delegated event listener)
+    $(document).on('click', '.clickable-text', function () {
+        var target = $(this).data('target'); // Get the target element
+        var newText = $(this).data('replace'); // Get the new text to replace
+
+        // Replace the content of the target element with new text
+        $(target).text(newText); // Replace the tagged text with new text
+
+        // Remove the clickable link after it's clicked
+        $(this).remove(); // Remove the link element
+    });
+}
+
+$(document).on(':passagerender', function (ev) {
+    makeTextClickable(); // Make text clickable after passage is rendered
+});
