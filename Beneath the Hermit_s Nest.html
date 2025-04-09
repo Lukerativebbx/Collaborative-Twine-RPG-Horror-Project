@@ -652,7 +652,8 @@ font-family: 'Cinzel', serif !important;
 }
 .clickable-text:hover {
     color: #ff9900; /* Change color on hover */
-}</style><script role="script" id="twine-user-script" type="text/twine-javascript">    // OPEN & CLOSE MODALS
+}</style><script role="script" id="twine-user-script" type="text/twine-javascript">
+// OPEN & CLOSE MODALS
     $(document).on("click", ".modal-trigger", function() {
         let modalID = $(this).attr("data-modal");
         $("#" + modalID).fadeIn(200);
@@ -668,120 +669,96 @@ font-family: 'Cinzel', serif !important;
         }
     });
 
-// ✅ FIX: Typewriter Effect Now Works on New Content
+// ✅ TYPEWRITER EFFECT FUNCTION
 function typeWriterEffect(element, text, speed = 30) {
-    let i = 0;
-    element.innerHTML = ""; // Clear existing text
-    function type() {
-        if (i < text.length) {
-            element.innerHTML += text.charAt(i);
-            i++;
-            setTimeout(type, speed);
-        }
-    }
-    type();
+	let i = 0;
+	element.innerHTML = ""; // Clear existing text
+	function type() {
+		if (i < text.length) {
+			element.innerHTML += text.charAt(i);
+			i++;
+			setTimeout(type, speed);
+		}
+	}
+	type();
 }
 
-// ✅ REAPPLY TYPEWRITER EFFECT AFTER EVERY PASSAGE RENDER
+// ✅ APLICAR EFECTO TYPEWRITER A TODOS LOS ELEMENTOS CORRESPONDIENTES
 function applyTypewriterEffect() {
-    $(".typewriter-text, .typewriter-textgreen").each(function () {
-        let text = $(this).text().trim();
-        $(this).text("");
-        typeWriterEffect(this, text, 40);
-    });
+	$(".typewriter-text, .typewriter-textgreen").each(function () {
+		let text = $(this).text().trim();
+		$(this).text("");
+		typeWriterEffect(this, text, 40);
+	});
 }
 
-// ✅ RPG UI PASSAGE INJECTION
-$(document).on(':passagerender', function(ev) {
-    let $passage = $(ev.content);
+// ✅ INYECCIÓN RPG SIN REEMPLAZAR EL CONTENIDO, ENVOLVIÉNDOLO
+$(document).on(':passagedisplay', function () {
+	const $passage = $('.passage');
 
-    if ($passage.hasClass('rpg') || $passage.hasClass('rpg1') || $passage.hasClass('rpg2') || $passage.hasClass('rpg3') || $passage.hasClass('rpg4')) {
-        $(".rpg-container").remove(); // Prevent duplicate containers
+	if ($passage.hasClass('rpg') || $passage.hasClass('rpg1') || $passage.hasClass('rpg2') || $passage.hasClass('rpg3') || $passage.hasClass('rpg4')) {
+		if ($('.rpg-container').length) return; // Prevent duplicated
 
-        let passageContent = $passage.clone().wrap('<div>').parent().html();
-        let characterImg = "https://lukerative.neocities.org/Beneath%20Hermits%20Nest/Images/Lucian.jpg";
+		let content = $passage.children().detach(); // Keep macro functions
 
-        // ✅ Supports both videos and images per passage
-        let useVideo = SugarCube.State.getVar("$useVideo") || false;
-        let narrativeImg = "https://lukerative.neocities.org/Beneath%20Hermits%20Nest/Images/chris-anderson-dran-sunken-idea4dd.jpg";
-        let narrativeVideo = SugarCube.State.getVar("$videoSource") || "";
+		// Variables condicionales por clase
+		let characterImg = "https://lukerative.neocities.org/Beneath%20Hermits%20Nest/Images/Lucian.jpg";
+		let narrativeImg = "https://lukerative.neocities.org/Beneath%20Hermits%20Nest/Images/chris-anderson-dran-sunken-idea4dd.jpg";
+		let narrativeVideo = SugarCube.State.getVar("$videoSource") || "";
+		let useVideo = SugarCube.State.getVar("$useVideo") || false;
+		let dividerColor = "rgba(255, 255, 255, 0.3)";
 
-        let option1Text = "Investigate the Deck";
-        let option2Text = "Speak to the Crew";
-        let option3Text = "Check the Cargo";
-        let option1Passage = "DeckInvestigation";
-        let option2Passage = "CrewTalk";
-        let option3Passage = "CargoCheck";
-        let dividerColor = "rgba(255, 255, 255, 0.3)"; // Default Divider
+		if ($passage.hasClass("rpg")) {
+			narrativeImg = "https://lukerative.neocities.org/Beneath%20Hermits%20Nest/Images/Screenshot%202025-03-25%20at%202.04.34%E2%80%AFPM.png";
+			dividerColor = "rgba(200, 200, 255, 0.5)";
+		}
 
-        if ($passage.hasClass('rpg')) {
-            characterImg = "https://lukerative.neocities.org/Beneath%20Hermits%20Nest/Images/Lucian.jpg";
-            narrativeImg = "https://lukerative.neocities.org/Beneath%20Hermits%20Nest/Images/Screenshot%202025-03-25%20at%202.04.34%E2%80%AFPM.png";
-            option1Text = "Exit the wagon";
-            option2Text = "Read letter in pocket";
-            option3Text = "Wait";
-            option1Passage = "WagonExit";
-            option3Passage = "Wait";
-            dividerColor = "rgba(200, 200, 255, 0.5)";
-        }
+		// 🧱 RPG Layout
+		const layout = $(`
+			<div class="rpg-container">
+				<div class="left-panel">
+					<div class="character-panel">
+						<div class="character-portrait">
+							<img id="characterImage" src="${characterImg}" alt="Character Portrait">
+						</div>
+						<div class="stat-bar-container">
+							<div class="stat-bar"><div class="health-bar-fill" style="width:100%"></div></div>
+							<p>HEALTH</p>
+							<div class="stat-bar"><div class="madness-bar-fill"></div></div>
+							<p>MADNESS</p>
+						</div>
+					</div>
+					<div class="player-panel">
+						<div class="player-action modal-trigger" data-modal="modalInventory">Inventory</div>
+						<div class="player-action">Journal</div>
+						<div class="player-action">Options</div>
+					</div>
+				</div>
 
-        let rpgLayout = `
-            <div class="rpg-container">
-                <div class="left-panel">
-                    <div class="character-panel">
-                        <div class="character-portrait">
-                            <img id="characterImage" src="${characterImg}" alt="Character Portrait">
-                        </div>
-                        <div class="stat-bar-container">
-                            <div class="stat-bar"><div class="health-bar-fill" style="width:100%"></div></div>
-                            <p>HEALTH</p>
-                            <div class="stat-bar"><div class="madness-bar-fill"></div></div>
-                            <p>MADNESS</p>
-                        </div>
-                    </div>
+				<div class="narrative-container">
+					${useVideo ? `
+						<video id="narrativeVideo" autoplay loop muted playsinline>
+							<source src="${narrativeVideo}" type="video/mp4">
+							<source src="${narrativeVideo.replace('.mp4', '.mov')}" type="video/quicktime">
+							Your browser does not support the video tag.
+						</video>` :
+						`<img id="narrativeImage" src="${narrativeImg}" alt="Narrative Image">`
+					}
 
-                    <div class="player-panel">
-                        <div class="player-action modal-trigger" data-modal="modalInventory">Inventory</div>
-                        <div class="player-action">Journal</div>
-                        <div class="player-action">Options</div>
-                    </div>
-                </div>
+					<div class="narrative-divider" style="background: ${dividerColor};"></div>
+					<div id="narrativeTextContainer"></div>
+				</div>
+			</div>
+		`);
 
-                <div class="narrative-container">
-                    ${useVideo ? `
-                        <video id="narrativeVideo" autoplay loop muted playsinline>
-                            <source src="${narrativeVideo}" type="video/mp4">
-                            <source src="${narrativeVideo.replace('.mp4', '.mov')}" type="video/quicktime">
-                            Your browser does not support the video tag.
-                        </video>
-                    ` : `
-                        <img id="narrativeImage" src="${narrativeImg}" alt="Narrative Image">
-                    `}
+		layout.find('#narrativeTextContainer').append(content);
+		$passage.append(layout);
 
-                    <div class="narrative-divider" style="background: ${dividerColor};"></div>
-                    
-                    <div id="narrativeTextContainer">${passageContent}</div>
-
-                    <!-- Hide the textboxes if it's an RPG passage -->
-                    ${$passage.hasClass('rpg') ? '' : `
-                        <div class="rpg-links">
-                            <div class="rpg-textbox" onclick="SugarCube.Engine.play('${option1Passage}');">${option1Text}</div>
-                            <div class="rpg-textbox modal-trigger" data-modal="modalLetter">${option2Text}</div>
-                            <div class="rpg-textbox" onclick="SugarCube.Engine.play('${option3Passage}');">${option3Text}</div>
-                        </div>
-                    `}
-                </div>
-            </div>
-        `;
-
-        $passage.empty().append(rpgLayout);
-
-        // ✅ Apply typewriter effect *AFTER* content is loaded
-        setTimeout(function() {
-            $(document).trigger(':passagedisplay');
-            applyTypewriterEffect();
-        }, 50);
-    }
+		// ⏱️ Delay 
+		setTimeout(() => {
+			applyTypewriterEffect();
+		}, 50);
+	}
 });
 
 //Function to add madness
@@ -791,8 +768,6 @@ $(document).on(':passagerender', function(ev) {
         currentMad = isNaN(parseInt(currentMad)) ? 0 : parseInt(currentMad); 
 
         let newMad = currentMad + mad;
-        console.log("Valor actual de locura:", currentMad, "Nuevo valor:", newMad); 
-
         if (newMad >= 100) {
             barMadness.style.width = "100%";
         } else if (newMad > 0) {
@@ -809,8 +784,6 @@ $(document).on(':passagerender', function(ev) {
         currentHealth = isNaN(parseInt(currentHealth)) ? 0 : parseInt(currentHealth); 
 
         let newHealth = currentHealth + health;
-        console.log("Valor actual de vida:", currentHealth, "Nuevo valor:", newHealth); 
-
         if (newHealth >= 100) {
             barHealth.style.width = "100%";
         } else if (newHealth > 0) {
@@ -859,6 +832,10 @@ $(document).on(":passagerender", function () {
             $this.fadeIn("slow");
         }, 6000);
     });
+});
+
+$(document).on(':passagedisplay', function () {
+    applyTypewriterEffect();
 });
 </script><tw-passagedata pid="1" name="StoryInit" tags="Menu" position="300,200" size="100,100">&lt;div class=&quot;title&quot;&gt;Beneath Hermit&#39;s Nest&lt;/div&gt;&lt;!--
 --&gt;&lt;div class=&quot;menu-options&quot;&gt;
@@ -913,7 +890,45 @@ $(document).on(":passagerender", function () {
             &lt;p&gt;Option 3&lt;/p&gt;
         &lt;/div&gt;
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="Set Sail" tags="rpg" position="425,225" size="100,100">&lt;div id=&quot;step_0&quot;&gt;&lt;p class=&quot;typewriter-textgreen&quot;&gt;&quot;Ah, Gloomtow, a wretched town. Still stinks of fish, sewage, and ale. Not exactly a place for a holiday...But of course, I didn&#39;t come for the scenery. No, I have business to attend to...&quot;&lt;/p&gt;&lt;p&gt;&lt;span class=&quot;clickable-text&quot; data-target=&quot;#step_1&quot;&gt;Look outside the window&lt;/span&gt;&lt;/p&gt;&lt;/div&gt;&lt;div id=&quot;step_1&quot; class=&quot;hidden&quot;&gt;&lt;p class=&quot;typewriter-textgreen&quot;&gt;You peer out of the carriage window, but the view is bleak, a fog hanging over the town.&lt;/p&gt;&lt;p&gt;&lt;span class=&quot;clickable-text&quot; data-target=&quot;#step_2_A&quot; onclick=&quot;addMadness(10)&quot;&gt;When you smell a tremendous stench, you proceed to vomit rainbows.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span class=&quot;clickable-text&quot; data-target=&quot;#step_2_B&quot; onclick=&quot;addHealth(-10)&quot;&gt;You go back inside for a beer... it&#39;s going to be a tough night.&lt;/span&gt;&lt;/p&gt;&lt;/div&gt;&lt;div id=&quot;step_2_A&quot; class=&quot;hidden&quot;&gt;&lt;p class=&quot;typewriter-textgreen&quot;&gt;You get 10 points of madness.&lt;/p&gt;&lt;/div&gt;&lt;div id=&quot;step_2_B&quot; class=&quot;hidden&quot;&gt;&lt;p class=&quot;typewriter-textgreen&quot;&gt;You lose 10 points of health.&lt;/p&gt;&lt;/div&gt;&lt;&lt;set $useVideo = true&gt;&gt;&lt;&lt;set $videoSource to &quot;https://lukerative.neocities.org/Beneath%20Hermits%20Nest/Videos/Carraige%20to%20Gloomtow.mov&quot;&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="Set Sail" tags="rpg" position="425,225" size="100,100">&lt;div id=&quot;step_0&quot;&gt;
+	&lt;p class=&quot;typewriter-textgreen&quot;&gt;
+    &quot;Ah, Gloomtow, a wretched town. Still stinks of fish, sewage, and ale. Not exactly a place for a holiday...But of course, I didn&#39;t come for the scenery. No, I have business to attend to...&quot;
+    &lt;/p&gt;
+    &lt;p&gt;
+   &lt;&lt;type 60ms&gt;&gt;\
+Hello world!
+
+&lt;&lt;link &quot;Click here!&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
+\&lt;&lt;/type&gt;&gt;
+    	&lt;span class=&quot;clickable-text&quot; data-target=&quot;#step_1&quot;  id=&quot;spanclick_2&quot;&gt;
+        Look outside the window&lt;/span&gt;
+   &lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&quot;step_1&quot; class=&quot;hidden&quot;&gt;
+		&lt;p class=&quot;typewriter-textgreen&quot;&gt;
+        You peer out of the carriage window, but the view is bleak, a fog hanging over the town.
+        &lt;/p&gt;
+        &lt;p&gt;
+          &lt;span class=&quot;clickable-text&quot; data-target=&quot;#step_2_A&quot; onclick=&quot;addMadness(10)&quot;&gt;
+          When you smell a tremendous stench, you proceed to vomit rainbows.
+          &lt;/span&gt;
+        &lt;/p&gt;
+        &lt;p&gt;
+        &lt;span class=&quot;clickable-text&quot; data-target=&quot;#step_2_B&quot; onclick=&quot;addHealth(-10)&quot;&gt;
+        You go back inside for a beer... it&#39;s going to be a tough night.
+        &lt;/span&gt;
+        &lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div id=&quot;step_2_A&quot; class=&quot;hidden&quot;&gt;
+        &lt;p class=&quot;typewriter-textgreen&quot;&gt;You get 10 points of madness.&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;div id=&quot;step_2_B&quot; class=&quot;hidden&quot;&gt;
+      &lt;p class=&quot;typewriter-textgreen&quot;&gt;You lose 10 points of health.&lt;/p&gt;
+   &lt;/div&gt;
+   
+   
+   &lt;&lt;set $useVideo = true&gt;&gt;
+   &lt;&lt;set $videoSource to &quot;https://lukerative.neocities.org/Beneath%20Hermits%20Nest/Videos/Carraige%20to%20Gloomtow.mov&quot;&gt;&gt;
 </tw-passagedata><tw-passagedata pid="4" name="ModalHooks" tags="" position="100,100" size="100,100"></tw-passagedata><tw-passagedata pid="5" name="ReadLetter" tags="" position="500,500" size="100,100"></tw-passagedata></tw-storydata>
 	<script id="script-sugarcube" type="text/javascript">
 	/*! SugarCube JS */
