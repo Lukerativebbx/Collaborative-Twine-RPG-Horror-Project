@@ -669,6 +669,9 @@ font-family: 'Cinzel', serif !important;
         }
     });
 
+
+
+
 // ✅ TYPEWRITER EFFECT FUNCTION
 function typeWriterEffect(element, text, speed = 30) {
 	let i = 0;
@@ -697,9 +700,9 @@ $(document).on(':passagedisplay', function () {
 	const $passage = $('.passage');
 
 	if ($passage.hasClass('rpg') || $passage.hasClass('rpg1') || $passage.hasClass('rpg2') || $passage.hasClass('rpg3') || $passage.hasClass('rpg4')) {
-		if ($('.rpg-container').length) return; // Prevent duplicated
+		if ($('.rpg-container').length) return; // Previene duplicados
 
-		let content = $passage.children().detach(); // Keep macro functions
+		let content = $passage.children().detach(); // Mantiene los macros funcionales
 
 		// Variables condicionales por clase
 		let characterImg = "https://lukerative.neocities.org/Beneath%20Hermits%20Nest/Images/Lucian.jpg";
@@ -713,7 +716,7 @@ $(document).on(':passagedisplay', function () {
 			dividerColor = "rgba(200, 200, 255, 0.5)";
 		}
 
-		// 🧱 RPG Layout
+		// 🧱 Construcción del layout RPG
 		const layout = $(`
 			<div class="rpg-container">
 				<div class="left-panel">
@@ -754,7 +757,7 @@ $(document).on(':passagedisplay', function () {
 		layout.find('#narrativeTextContainer').append(content);
 		$passage.append(layout);
 
-		// ⏱️ Delay 
+		// ⏱️ Delay para que el DOM cargue bien antes de aplicar efectos
 		setTimeout(() => {
 			applyTypewriterEffect();
 		}, 50);
@@ -768,6 +771,8 @@ $(document).on(':passagedisplay', function () {
         currentMad = isNaN(parseInt(currentMad)) ? 0 : parseInt(currentMad); 
 
         let newMad = currentMad + mad;
+        console.log("Valor actual de locura:", currentMad, "Nuevo valor:", newMad); 
+
         if (newMad >= 100) {
             barMadness.style.width = "100%";
         } else if (newMad > 0) {
@@ -784,6 +789,8 @@ $(document).on(':passagedisplay', function () {
         currentHealth = isNaN(parseInt(currentHealth)) ? 0 : parseInt(currentHealth); 
 
         let newHealth = currentHealth + health;
+        console.log("Valor actual de vida:", currentHealth, "Nuevo valor:", newHealth); 
+
         if (newHealth >= 100) {
             barHealth.style.width = "100%";
         } else if (newHealth > 0) {
@@ -795,7 +802,7 @@ $(document).on(':passagedisplay', function () {
 
 //Function to search div stepper
 function getDivStepper (htmlElement){
-	if(htmlElement.id.includes("step_")){
+	if(htmlElement.id.includes("step_")){ //spanclick_2
       return htmlElement;
     }
     else if(htmlElement.id == "passages"){
